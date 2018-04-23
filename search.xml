@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[科学上网教程]]></title>
-    <url>%2F2018%2F04%2F22%2F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E6%95%99%E7%A8%8B%2F</url>
+    <title><![CDATA[稳稳的科学上网教程]]></title>
+    <url>%2F2018%2F04%2F23%2F%E7%A8%B3%E7%A8%B3%E7%9A%84%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E6%95%99%E7%A8%8B%2F</url>
     <content type="text"><![CDATA[服务器选择Centos 6x64 锐速更换内核： 1rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm 1rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-2.6.32-504.3.3.el6.x86_64.rpm --force reboot 1wget -N --no-check-certificate https://softs.fun/Bash/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; bash ssr.sh 安装锐速 安装libsodium(chacha20) 安装ShadowSocksR 配置后的相关信息：相关链接：服务器网址，价格和可靠性都不错ping测试网站，用来检测ip地址是否被黑]]></content>
       <categories>
         <category>科学上网</category>
