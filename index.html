@@ -324,6 +324,173 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/03/butterknife-Android-Studio插件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="袁来">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="袁来的code空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/03/butterknife-Android-Studio插件/" itemprop="url">butterknife - Android Studio插件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-03T20:35:48+08:00">
+                2018-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-插件推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 插件推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/05/03/butterknife-Android-Studio插件/" class="leancloud_visitors" data-flag-title="butterknife - Android Studio插件">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count">℃</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>不知道有时候你在开发<code>Android</code>程序的时候有没有为反反复复的<code>findViewById</code>和设置<code>onclick</code>而苦恼吗？那你就可以用<code>butterKnife</code>来解决你的苦恼，接下来我们就来教大家怎么设置<code>butterKnife</code>。</p>
+<h2 id="下载插件和添加依赖："><a href="#下载插件和添加依赖：" class="headerlink" title="下载插件和添加依赖："></a>下载插件和添加依赖：</h2><h3 id="下载插件"><a href="#下载插件" class="headerlink" title="下载插件"></a>下载插件</h3><p>打开<code>Preferences</code>里面的<code>Plugins</code>，接着选择<code>Browse Repositories</code>，这里你就可以搜索<code>Android Studio</code>里面的所有插件，具体内容可以参考图。<br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/butterknife%20-%20Android%20Studio%E6%8F%92%E4%BB%B6/2018-5-3-1.jpg" alt=""><br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/butterknife%20-%20Android%20Studio%E6%8F%92%E4%BB%B6/2018-5-3-2.jpg" alt=""></p>
+<p>接着搜索<code>Android ButterKnife Zelezny</code>这个插件，再网上看了一些教程，都只是在这里为止了，但是我的电脑一直都没有效，最后自己看了它的<code>GitHub</code>仓库，发现还需要添加两个依赖。</p>
+<p><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/butterknife%20-%20Android%20Studio%E6%8F%92%E4%BB%B6/2018-5-3-3.jpg" alt=""></p>
+<h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><p>我们还得在<code>dependencies</code>里面添加两个依赖，具体的依赖如下，大家直接添加即可，如果需要最新的版本，可以直接在它的<code>Github</code>仓库看看，我把仓库地址附在这里<a href="https://github.com/JakeWharton/butterknife" target="_blank" rel="noopener">butterknife</a>。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">implementation <span class="string">'com.jakewharton:butterknife:8.8.1'</span></span><br><span class="line">annotationProcessor <span class="string">'com.jakewharton:butterknife-compiler:8.8.1'</span></span><br></pre></td></tr></table></figure>
+<h2 id="简单地教大家使用这个插件"><a href="#简单地教大家使用这个插件" class="headerlink" title="简单地教大家使用这个插件"></a>简单地教大家使用这个插件</h2><p>其实这个插件用起来挺简单的，我们就直接按照平时地习惯在<code>xml</code>里面给控件添加<code>id</code>，然后在每个<code>activity</code>或者<code>fragment</code>对应的布局视图的地方按住<code>Command</code>键和<code>N</code>键，这时候就会出现一个菜单，我们就选择<code>Generate Butterknife injections</code>,菜单如图所示。</p>
+<p><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/butterknife%20-%20Android%20Studio%E6%8F%92%E4%BB%B6/2018-5-3-4.jpg" alt=""></p>
+<p>接着我们点击了那个以后就会出现一个菜单，具体的菜单如下所示：</p>
+<p><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/butterknife%20-%20Android%20Studio%E6%8F%92%E4%BB%B6/2018-5-3-5.jpg" alt=""></p>
+<p>左边的红框最上面的是全选，或者单个的选择，<code>OnClick</code>选择生成点击事件，<code>Variable Name</code>是用来设置<code>button</code>的名字，最下面的<code>split OnClick methods</code>是把点击事件分开，<code>Create ViewHolder</code>在<code>Recyclerview</code>里面使用的，最后贴上几张效果图。<br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/butterknife%20-%20Android%20Studio%E6%8F%92%E4%BB%B6/2018-5-3-6.jpg" alt=""></p>
+<p><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/butterknife%20-%20Android%20Studio%E6%8F%92%E4%BB%B6/2018-5-3-7.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+	<div>
+      
+	</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/01/Material-Design的研究-一/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1072,7 +1239,7 @@
 <li>安装ShadowSocksR</li>
 </ol>
 <hr>
-<h2 id="配置后的相关信息："><a href="#配置后的相关信息：" class="headerlink" title="配置后的相关信息："></a><strong>配置后的相关信息：</strong></h2><p><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/2018-4-22-1.png" alt=""><br>相关链接：<br><a href="https://my.vultr.com" target="_blank" rel="noopener">服务器网址，价格和可靠性都不错</a><br><a href="http://ping.chinaz.com/" target="_blank" rel="noopener">ping测试网站，用来检测ip地址是否被黑</a></p>
+<h2 id="配置后的相关信息："><a href="#配置后的相关信息：" class="headerlink" title="配置后的相关信息："></a><strong>配置后的相关信息：</strong></h2><p><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/%E7%A8%B3%E7%A8%B3%E7%9A%84%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E6%95%99%E7%A8%8B/2018-5-3-8.png" alt=""><br>相关链接：<br><a href="https://my.vultr.com" target="_blank" rel="noopener">服务器网址，价格和可靠性都不错</a><br><a href="http://ping.chinaz.com/" target="_blank" rel="noopener">ping测试网站，用来检测ip地址是否被黑</a></p>
 
           
         
@@ -1161,7 +1328,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1172,7 +1339,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1183,7 +1350,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
