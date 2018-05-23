@@ -324,6 +324,191 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/23/用RxJava完成轮询请求/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="袁来">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="袁来的code空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/23/用RxJava完成轮询请求/" itemprop="url">用RxJava完成轮询请求</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-23T22:13:39+08:00">
+                2018-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Retrofit/" itemprop="url" rel="index">
+                    <span itemprop="name">Retrofit</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Retrofit/RxJava/" itemprop="url" rel="index">
+                    <span itemprop="name">RxJava</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/05/23/用RxJava完成轮询请求/" class="leancloud_visitors" data-flag-title="用RxJava完成轮询请求">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count">℃</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近做一个软件，需要后台服务轮询请求数据，这里我是用<code>RxJava</code>来实现轮询。这里我用金山词霸的接口来做测试。</p>
+<h2 id="一般的做法"><a href="#一般的做法" class="headerlink" title="一般的做法"></a>一般的做法</h2><p>为什么说这是一般的做法，是因为我们平时一般就是使用嵌套的形式，就是外面是一个轮询，内部嵌套一个网络请求。其中<code>interval</code>是<code>RxJava</code>的一个操作符，我们用<code>interval</code>举一个例子，具体的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Observable</span><br><span class="line">    .interval(<span class="number">2</span>,<span class="number">1</span>,TimeUnit.SECONDS)</span><br><span class="line">    .subscribe(<span class="keyword">new</span> Consumer&lt;Long&gt;() &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(Long aLong)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">          Log.d(<span class="string">"InternetService"</span>,<span class="string">"----&gt;"</span>+aLong);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<p>输出的效果如下：</p>
+<p><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/%E7%94%A8RxJava%E5%AE%8C%E6%88%90%E8%BD%AE%E8%AF%A2%E8%AF%B7%E6%B1%82/2018-5-23-1.gif" alt=""></p>
+<p>接着我的网络请求如下，我网络请求用的是<code>Retrofit</code>和<code>RxJava</code>来请求，具体的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">                        .baseUrl(<span class="string">"http://fy.iciba.com/"</span>)                         </span><br><span class="line">                        .addConverterFactory(GsonConverterFactory.create()) </span><br><span class="line">                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) </span><br><span class="line">                        .build();</span><br><span class="line"></span><br><span class="line">                         GetRequest_Interface request = retrofit.create(GetRequest_Interface.class);</span><br><span class="line"></span><br><span class="line">                         Observable&lt;Translation&gt; observable = request.getCall();</span><br><span class="line">                  </span><br><span class="line">                  observable</span><br><span class="line">                        .subscribeOn(Schedulers.io())                                           </span><br><span class="line">                        .observeOn(AndroidSchedulers.mainThread())  </span><br><span class="line">                        .subscribe(<span class="keyword">new</span> Observer&lt;Translation&gt;() &#123;</span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(Disposable d)</span> </span>&#123;</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(Translation result)</span> </span>&#123;</span><br><span class="line">                                                                result.show() ;</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">                                Log.d(TAG, <span class="string">"请求失败"</span>);</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;);</span><br></pre></td></tr></table></figure>
+<p>通过上面的代码我们需要注意的是我们需要通过<code>addCallAdapterFactory()</code>添加<code>RxJava2CallAdapterFactory</code>,这样就可以让<code>RxJava</code>可以直接跟<code>Retrofit</code>搭配使用,<code>Retrofit</code>的初始化我在之前的文章里面谈过，其中<code>subscribeOn()</code> 指定的是上游发送事件的线程, <code>observeOn()</code> 指定的是下游接收事件的线程，RxJava为我们内置了很多线程选项，具体的选项如下：</p>
+<ul>
+<li>Schedulers.io() 代表io操作的线程, 通常用于网络,读写文件等io密集型的操作</li>
+<li>Schedulers.computation() 代表CPU计算密集型的操作, 例如需要大量计算的操作</li>
+<li>Schedulers.newThread() 代表一个常规的新线程</li>
+<li>AndroidSchedulers.mainThread() 代表Android的主线程</li>
+</ul>
+<p>这些内置的Scheduler已经足够满足我们开发的需求, 因此我们应该使用内置的这些选项, 在RxJava内部使用的是线程池来维护这些线程, 所有效率也比较高.</p>
+<h2 id="链式做法"><a href="#链式做法" class="headerlink" title="链式做法"></a>链式做法</h2><p><code>RxJava</code>最大的好处就是逻辑清楚，上面的例子是通过嵌套来实现轮询请求的，所以我们可以借助<code>RxJava</code>的操作符来完成上面同样的效果，这里我们用<code>flatMap</code>这个操作符把<code>long</code>类型转换成我们想要的<code>Observable&lt;T&gt;</code>类型，具体的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Observable</span><br><span class="line">     .interval(<span class="number">2</span>,<span class="number">5</span>, TimeUnit.SECONDS)</span><br><span class="line">     .doOnNext(<span class="keyword">new</span> Consumer&lt;Long&gt;() &#123;</span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(Long integer)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">           Log.d(<span class="string">"InternetService"</span>, <span class="string">"第 "</span> + integer + <span class="string">" 次轮询"</span> );</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;)</span><br><span class="line">   .subscribeOn(Schedulers.io())</span><br><span class="line">   .flatMap(<span class="keyword">new</span> Function&lt;Long, ObservableSource&lt;Translation&gt;&gt;() &#123;</span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> ObservableSource&lt;Translation&gt; <span class="title">apply</span><span class="params">(Long aLong)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">           <span class="keyword">return</span> request.getCall();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;)</span><br><span class="line">   .subscribeOn(AndroidSchedulers.mainThread())</span><br><span class="line">   .subscribe(<span class="keyword">new</span> Consumer&lt;Translation&gt;() &#123;</span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(Translation translation)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">           Log.d(<span class="string">"InternetService"</span>,translation.getContent().getOut());</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;);</span><br></pre></td></tr></table></figure>
+<p>通过上面可以看到<code>flatMap</code>这个操作符把<code>long</code>转换成<code>Observable&lt;Translation&gt;</code>，这个返回的就是转换的类型，同时也可以体现出链式操作。</p>
+<h2 id="停止轮询"><a href="#停止轮询" class="headerlink" title="停止轮询"></a>停止轮询</h2><p>现在问题解决了但我们还剩下一个问题就是怎么停止轮询，首先链式操作返回的是一个<code>Disposable</code>，然后我们调用<code>disposable.dispose()</code>来断开上游与下游的联系。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+	<div>
+      
+	</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/03/butterknife-Android-Studio插件/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1328,7 +1513,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1339,7 +1524,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1350,7 +1535,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
