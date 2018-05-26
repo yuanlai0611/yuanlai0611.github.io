@@ -106,7 +106,7 @@
 
 
 
-  <meta name="keywords" content="实用工具," />
+  <meta name="keywords" content="自定义View,锁屏页,滑动," />
 
 
 
@@ -117,20 +117,21 @@
 
 
 
-<meta name="description" content="服务器选择Centos 6x64 锐速更换内核： 1rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm  1rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-2.6.32-50">
-<meta name="keywords" content="实用工具">
+<meta name="description" content="最近的一个项目里面需要使用锁屏页，实现的方法是用Activity来伪装锁屏页，网上对这个方面的教程不多，大多数都是基于这篇文章，但是这篇文章有些细节点没有关注到，所以我在这里进行一些完善和补充，并把整个完整的过程写出来，供大家参考。 我们怎么做到锁屏的时候显示Activity首先我们在这里创建一个Activity，名字叫作LockScreenActivity，然后我们来着手解决如何知道屏幕锁屏，思">
+<meta name="keywords" content="自定义View,锁屏页,滑动">
 <meta property="og:type" content="article">
-<meta property="og:title" content="稳稳的科学上网教程">
-<meta property="og:url" content="http://yoursite.com/2018/04/23/稳稳的科学上网教程/index.html">
+<meta property="og:title" content="Android 滑动解锁页">
+<meta property="og:url" content="http://yoursite.com/2018/05/26/Android-滑动解锁页/index.html">
 <meta property="og:site_name" content="袁来的code空间">
-<meta property="og:description" content="服务器选择Centos 6x64 锐速更换内核： 1rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm  1rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-2.6.32-50">
+<meta property="og:description" content="最近的一个项目里面需要使用锁屏页，实现的方法是用Activity来伪装锁屏页，网上对这个方面的教程不多，大多数都是基于这篇文章，但是这篇文章有些细节点没有关注到，所以我在这里进行一些完善和补充，并把整个完整的过程写出来，供大家参考。 我们怎么做到锁屏的时候显示Activity首先我们在这里创建一个Activity，名字叫作LockScreenActivity，然后我们来着手解决如何知道屏幕锁屏，思">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/%E7%A8%B3%E7%A8%B3%E7%9A%84%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E6%95%99%E7%A8%8B/2018-5-3-8.png">
-<meta property="og:updated_time" content="2018-05-03T12:45:08.839Z">
+<meta property="og:image" content="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/Android%20%E6%BB%91%E5%8A%A8%E8%A7%A3%E9%94%81%E9%A1%B5/2018-5-26-1.png">
+<meta property="og:image" content="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/Android%20%E6%BB%91%E5%8A%A8%E8%A7%A3%E9%94%81%E9%A1%B5/2018-5-26-2.png">
+<meta property="og:updated_time" content="2018-05-26T09:15:27.465Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="稳稳的科学上网教程">
-<meta name="twitter:description" content="服务器选择Centos 6x64 锐速更换内核： 1rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm  1rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-2.6.32-50">
-<meta name="twitter:image" content="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/%E7%A8%B3%E7%A8%B3%E7%9A%84%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E6%95%99%E7%A8%8B/2018-5-3-8.png">
+<meta name="twitter:title" content="Android 滑动解锁页">
+<meta name="twitter:description" content="最近的一个项目里面需要使用锁屏页，实现的方法是用Activity来伪装锁屏页，网上对这个方面的教程不多，大多数都是基于这篇文章，但是这篇文章有些细节点没有关注到，所以我在这里进行一些完善和补充，并把整个完整的过程写出来，供大家参考。 我们怎么做到锁屏的时候显示Activity首先我们在这里创建一个Activity，名字叫作LockScreenActivity，然后我们来着手解决如何知道屏幕锁屏，思">
+<meta name="twitter:image" content="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/Android%20%E6%BB%91%E5%8A%A8%E8%A7%A3%E9%94%81%E9%A1%B5/2018-5-26-1.png">
 
 
 
@@ -160,13 +161,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/23/稳稳的科学上网教程/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/05/26/Android-滑动解锁页/"/>
 
 
 
 
 
-  <title>稳稳的科学上网教程 | 袁来的code空间</title>
+  <title>Android 滑动解锁页 | 袁来的code空间</title>
   
 
 
@@ -327,7 +328,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/23/稳稳的科学上网教程/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/26/Android-滑动解锁页/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="袁来">
@@ -344,7 +345,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">稳稳的科学上网教程</h1>
+          <h1 class="post-title" itemprop="name headline">Android 滑动解锁页</h1>
         
 
         <div class="post-meta">
@@ -356,8 +357,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-23T17:05:05+08:00">
-                2018-04-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-26T17:13:10+08:00">
+                2018-05-26
               </time>
             
 
@@ -379,8 +380,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/科学上网/" itemprop="url" rel="index">
-                    <span itemprop="name">科学上网</span>
+                  <a href="/categories/自定义View/" itemprop="url" rel="index">
+                    <span itemprop="name">自定义View</span>
                   </a>
                 </span>
 
@@ -397,8 +398,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/23/稳稳的科学上网教程/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/04/23/稳稳的科学上网教程/" itemprop="commentsCount"></span>
+                <a href="/2018/05/26/Android-滑动解锁页/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/05/26/Android-滑动解锁页/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -406,7 +407,7 @@
 
           
           
-             <span id="/2018/04/23/稳稳的科学上网教程/" class="leancloud_visitors" data-flag-title="稳稳的科学上网教程">
+             <span id="/2018/05/26/Android-滑动解锁页/" class="leancloud_visitors" data-flag-title="Android 滑动解锁页">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -437,23 +438,24 @@
       
 
       
-        <h2 id="服务器选择Centos-6x64"><a href="#服务器选择Centos-6x64" class="headerlink" title="服务器选择Centos 6x64"></a><strong>服务器选择Centos 6x64</strong></h2><ol>
-<li><p>锐速更换内核：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm</span><br></pre></td></tr></table></figure>
-</li>
-<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-2.6.32-504.3.3.el6.x86_64.rpm --force</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>reboot</p>
-</li>
-<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -N --no-check-certificate https://softs.fun/Bash/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; bash ssr.sh</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装<strong>锐速</strong></p>
-</li>
-<li>安装libsodium(chacha20)</li>
-<li>安装ShadowSocksR</li>
-</ol>
-<hr>
-<h2 id="配置后的相关信息："><a href="#配置后的相关信息：" class="headerlink" title="配置后的相关信息："></a><strong>配置后的相关信息：</strong></h2><p><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/%E7%A8%B3%E7%A8%B3%E7%9A%84%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E6%95%99%E7%A8%8B/2018-5-3-8.png" alt=""><br>相关链接：<br><a href="https://my.vultr.com" target="_blank" rel="noopener">服务器网址，价格和可靠性都不错</a><br><a href="http://ping.chinaz.com/" target="_blank" rel="noopener">ping测试网站，用来检测ip地址是否被黑</a></p>
+        <p>最近的一个项目里面需要使用锁屏页，实现的方法是用<code>Activity</code>来伪装锁屏页，网上对这个方面的教程不多，大多数都是基于<a href="https://cloud.tencent.com/developer/article/1033584" target="_blank" rel="noopener">这篇文章</a>，但是这篇文章有些细节点没有关注到，所以我在这里进行一些完善和补充，并把整个完整的过程写出来，供大家参考。</p>
+<h2 id="我们怎么做到锁屏的时候显示Activity"><a href="#我们怎么做到锁屏的时候显示Activity" class="headerlink" title="我们怎么做到锁屏的时候显示Activity"></a>我们怎么做到锁屏的时候显示Activity</h2><p>首先我们在这里创建一个<code>Activity</code>，名字叫作<code>LockScreenActivity</code>，然后我们来着手解决如何知道屏幕锁屏，思路可以看下面的流程图（这里借鉴QQ音乐的资料图）😁。<br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/Android%20%E6%BB%91%E5%8A%A8%E8%A7%A3%E9%94%81%E9%A1%B5/2018-5-26-1.png" alt=""><br>通过上图的流程可知屏幕关闭会发出一个叫作<code>SCREEN_OFF</code>的系统广播，然后在<code>Service</code>里面去监听这个系统广播，一旦<code>App</code>启动，就启动这个<code>Service</code>，然后一旦系统发出<code>SCREEN_OFF</code>的广播，<code>Receiver</code>就会接受到。<br>接着，我们按上面得出来的步骤，来完成程序的设计，首先<code>new</code>一个<code>Service</code>，这个<code>Service</code>主要用来注册一个广播来监听<code>SCREEN_OFF</code>这一系统广播，但在此之前我们还得创建一个广播的接受器（<code>LockScreenReceiver</code>）,其具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockScreenReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        String action = intent.getAction();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (Intent.ACTION_SCREEN_OFF.equals(action)) &#123;</span><br><span class="line">            Intent mLockIntent = <span class="keyword">new</span> Intent(context, LockScreenActivity.class);</span><br><span class="line">            mLockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);</span><br><span class="line">            context.startActivity(mLockIntent);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着我们来创建用来注册监听广播的<code>Service</code>（<code>LockService</code>），其具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockService</span> <span class="keyword">extends</span> <span class="title">Service</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> LockScreenReceiver lockScreenReceiver;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        lockScreenReceiver = <span class="keyword">new</span> LockScreenReceiver();</span><br><span class="line">        IntentFilter mScreenOffFilte = <span class="keyword">new</span> IntentFilter();</span><br><span class="line">        mScreenOffFilte.addAction(Intent.ACTION_SCREEN_OFF);</span><br><span class="line">        registerReceiver(lockScreenReceiver,mScreenOffFilte);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line">        unregisterReceiver(lockScreenReceiver);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然注意了，在<code>Service</code>被<code>Destroy</code>的时候别忘了调用<code>unregisterReceiver</code>来解除注册的广播。<br>我们只用在App启动的时候来启动这个服务，具体的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>,LockService.class);</span><br><span class="line">startService(intent);</span><br></pre></td></tr></table></figure>
+<p>当然上面的这一些还不够，我们要加一个权限，加上使锁屏失效（当然如果你设置了密码是不能失效的）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:name=<span class="string">"android.permission.DISABLE_KEYGUARD"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<p>同时你还得在<code>Activity</code>里面设置一大堆属性：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);</span><br><span class="line">          getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);</span><br><span class="line">          getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);</span><br><span class="line">          getWindow().getDecorView().setSystemUiVisibility(</span><br><span class="line">                  View.SYSTEM_UI_FLAG_LAYOUT_STABLE</span><br><span class="line">                          | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION</span><br><span class="line">                          | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN</span><br><span class="line">                          | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION </span><br><span class="line">                          | View.SYSTEM_UI_FLAG_FULLSCREEN </span><br><span class="line">                          | View.SYSTEM_UI_FLAG_IMMERSIVE);</span><br></pre></td></tr></table></figure>
+<p>这上面的属性分别设置使布局锁屏的时候出现，去掉锁屏，全屏，去掉导航栏和状态栏等等，具体一些属性的效果有些我也说不清楚，大家有兴趣的可以自行<code>Google</code>一下。</p>
+<h2 id="实现锁屏的滑动效果"><a href="#实现锁屏的滑动效果" class="headerlink" title="实现锁屏的滑动效果"></a>实现锁屏的滑动效果</h2><p>这里我们定义一个<code>UnderView</code>来处理滑动逻辑。在这里盗一张QQ音乐团队的图，我觉得它的图解释的很清楚。<br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/Android%20%E6%BB%91%E5%8A%A8%E8%A7%A3%E9%94%81%E9%A1%B5/2018-5-26-2.png" alt=""><br>这里把视图分为<code>MoveView</code>和<code>UnderView</code>，废话不多说，上完整的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UnderView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> mStartX;</span><br><span class="line">    <span class="keyword">private</span> View mMoveView;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mWidth;</span><br><span class="line">    <span class="keyword">private</span> OnSlideFinishListener mOnSlideFinishListener;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnderView</span><span class="params">(Context context, @Nullable AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">        mWidth = ScreenUtils.getScreenWidth(context);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSlideListener</span><span class="params">(OnSlideFinishListener onSlideFinishListener)</span></span>&#123;</span><br><span class="line">        mOnSlideFinishListener = onSlideFinishListener;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> action = event.getAction();</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">float</span> nx = event.getX();</span><br><span class="line">        <span class="keyword">switch</span> (action) &#123;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">                mStartX = nx;</span><br><span class="line">                onAnimationEnd();</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">                handleMoveView(nx);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_UP:</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_CANCEL:</span><br><span class="line">                doTriggerEvent(nx);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handleMoveView</span><span class="params">(<span class="keyword">float</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">float</span> movex = x - mStartX;</span><br><span class="line">        <span class="keyword">if</span> (movex &lt; <span class="number">0</span>)</span><br><span class="line">            movex = <span class="number">0</span>;</span><br><span class="line">        mMoveView.setTranslationX(movex);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> mWidthFloat = (<span class="keyword">float</span>) mWidth;<span class="comment">//屏幕显示宽度</span></span><br><span class="line">        <span class="keyword">if</span>(getBackground()!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            getBackground().setAlpha((<span class="keyword">int</span>) ((mWidthFloat - mMoveView.getTranslationX()) / mWidthFloat * <span class="number">200</span>));<span class="comment">//初始透明度的值为200</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doTriggerEvent</span><span class="params">(<span class="keyword">float</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">float</span> movex = x - mStartX;</span><br><span class="line">        <span class="keyword">if</span> (movex &gt; (mWidth * <span class="number">0.4</span>)) &#123;</span><br><span class="line">            moveMoveView(mWidth-mMoveView.getLeft(),<span class="keyword">true</span>);<span class="comment">//自动移动到屏幕右边界之外，并finish掉</span></span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            moveMoveView(-mMoveView.getLeft(),<span class="keyword">false</span>);<span class="comment">//自动移动回初始位置，重新覆盖</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">moveMoveView</span><span class="params">(<span class="keyword">float</span> to,<span class="keyword">boolean</span> exit)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        ObjectAnimator animator = ObjectAnimator.ofFloat(mMoveView, <span class="string">"translationX"</span>, to);</span><br><span class="line">        animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;</span><br><span class="line">                 <span class="keyword">if</span>(getBackground()!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                    getBackground().setAlpha((<span class="keyword">int</span>) (((<span class="keyword">float</span>) mWidth - mMoveView.getTranslationX()) / (<span class="keyword">float</span>) mWidth * <span class="number">200</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);<span class="comment">//随移动动画更新背景透明度</span></span><br><span class="line">        animator.setDuration(<span class="number">250</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(exit)&#123;</span><br><span class="line">            animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</span><br><span class="line">                    mOnSlideFinishListener.onSlideFinish();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;<span class="comment">//监听动画结束，利用Handler通知Activity退出</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMoveView</span><span class="params">(View moveView)</span></span>&#123;</span><br><span class="line">        mMoveView = moveView;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnSlideFinishListener</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onSlideFinish</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来我们来分析一下这个自定义<code>View</code>，在<code>handleMoveView</code>里面处理当手在屏幕上面滑动时<code>mMoveView</code>随着手指滑动，<code>doTriggerEvent</code>是处理松开手指时<code>mMoveView</code>的反应，当滑动的距离不超过屏幕的40%时，<code>mMoveView</code>返回到原处，超过了就直接划过去。<br>当然重点是要在<code>UnderView</code>里面获取<code>mMoveView</code>和设置<code>OnSlideFinishListener</code>来处理当锁屏划开的时候<code>finish</code>掉当前的<code>Activity</code>。</p>
+<h2 id="细节处理"><a href="#细节处理" class="headerlink" title="细节处理"></a>细节处理</h2><p>完成了上面的两步，大家可以运行一下程序，这时候会出现两个问题，滑动时，滑动过的背景不是透明的，如果你没退出<code>Activity</code>又反复打开屏幕关闭屏幕，会有多个<code>LockScreenActivity</code>在<code>Activity</code>栈里面。<br>首先第二个问题比较好解决，直接在Manifest里面指定<code>LockScreenActivity</code>的<code>launchMode</code>为<code>singleInstance</code>，即单例模式。这样栈里面就只会有一个<code>LockScreenActivity</code>存在。<br>第二个问题就需要设置<code>Activity</code>的背景为透明色，接着在<code>Activity</code>的<code>theme</code>，我们需要在<code>style</code>文件里为<code>LockScreenActivity</code>指定一个theme，具体的代码如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"LockScreenTheme"</span> <span class="attr">parent</span>=<span class="string">"AppTheme"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowIsTranslucent"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowBackground"</span>&gt;</span>@android:color/transparent<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:colorBackgroundCacheHint"</span>&gt;</span>@null<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowNoTitle"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:backgroundDimEnabled"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowAnimationStyle"</span>&gt;</span>@null<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowContentOverlay"</span>&gt;</span>@null<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里为止，我们就可以实现一个完整的锁屏页了(＾－＾)。</p>
 
       
     </div>
@@ -470,12 +472,12 @@
   <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
   <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
-  <p><span>本文标题:</span><a href="/2018/04/23/稳稳的科学上网教程/">稳稳的科学上网教程</a></p>
+  <p><span>本文标题:</span><a href="/2018/05/26/Android-滑动解锁页/">Android 滑动解锁页</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 袁来 的个人博客">袁来</a></p>
-  <p><span>发布时间:</span>2018年04月23日 - 17:04</p>
-  <p><span>最后更新:</span>2018年05月03日 - 20:05</p>
-  <p><span>原始链接:</span><a href="/2018/04/23/稳稳的科学上网教程/" title="稳稳的科学上网教程">http://yoursite.com/2018/04/23/稳稳的科学上网教程/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/04/23/稳稳的科学上网教程/"  aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2018年05月26日 - 17:05</p>
+  <p><span>最后更新:</span>2018年05月26日 - 17:05</p>
+  <p><span>原始链接:</span><a href="/2018/05/26/Android-滑动解锁页/" title="Android 滑动解锁页">http://yoursite.com/2018/05/26/Android-滑动解锁页/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2018/05/26/Android-滑动解锁页/"  aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
 </div>
@@ -535,7 +537,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/实用工具/" rel="tag"><i class="fa fa-tag"></i> 实用工具</a>
+            <a href="/tags/自定义View/" rel="tag"><i class="fa fa-tag"></i> 自定义View</a>
+          
+            <a href="/tags/锁屏页/" rel="tag"><i class="fa fa-tag"></i> 锁屏页</a>
+          
+            <a href="/tags/滑动/" rel="tag"><i class="fa fa-tag"></i> 滑动</a>
           
         </div>
       
@@ -548,15 +554,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/05/23/用RxJava完成轮询请求/" rel="next" title="用RxJava完成轮询请求">
+                <i class="fa fa-chevron-left"></i> 用RxJava完成轮询请求
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/23/Jsoup-模拟登录/" rel="prev" title="Jsoup 模拟登录">
-                Jsoup 模拟登录 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -716,7 +722,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器选择Centos-6x64"><span class="nav-number">1.</span> <span class="nav-text">服务器选择Centos 6x64</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置后的相关信息："><span class="nav-number">2.</span> <span class="nav-text">配置后的相关信息：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#我们怎么做到锁屏的时候显示Activity"><span class="nav-number">1.</span> <span class="nav-text">我们怎么做到锁屏的时候显示Activity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现锁屏的滑动效果"><span class="nav-number">2.</span> <span class="nav-text">实现锁屏的滑动效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#细节处理"><span class="nav-number">3.</span> <span class="nav-text">细节处理</span></a></li></ol></div>
             
 
           </div>
