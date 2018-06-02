@@ -324,6 +324,175 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/02/SSR局域网共享-Mac/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="袁来">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="袁来的code空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/02/SSR局域网共享-Mac/" itemprop="url">SSR局域网共享(Mac)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-02T20:29:13+08:00">
+                2018-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/科学上网/" itemprop="url" rel="index">
+                    <span itemprop="name">科学上网</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/02/SSR局域网共享-Mac/" class="leancloud_visitors" data-flag-title="SSR局域网共享(Mac)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count">℃</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>前几天自己的<code>Pixel</code>申请升级成<code>P</code>，发现很多软件出现不兼容的问题，比如说<code>Tim</code>的<code>QQ</code>空间和邮件功能，支付宝的共享单车功能会直接闪退，正常使用一些软件，比如说在<code>Tim</code>里面查看文件和用WPS浏览文件时会出现<code>OOM</code>（内存不足）…… 这能忍吗?果断降级，问题来了，退回到<code>OREO</code>（<code>Android</code> <code>8.0</code>）的时候会出现一开始要先连接<code>Google</code>浏览器（需要翻墙😭），这不是坑爹吗？手机还没开就要我翻墙，在网上查看了相关的教程，发现了一些不适用的问题，最后在室友的提醒下解决了问题。</p>
+</blockquote>
+<h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h2><p>其实这个问题也不是不能解决，有几个思路，其中刷系统我是不想考虑的，因为我用的<code>Pixel</code>是买的美版带锁的，所以刷机会有变砖的风险，以前用小米的时候遇见过手机变砖，自己没能解决~~另外的就是想办法在手机没有打开的情况下翻墙，一个是靠路由器翻墙，另一个是让我的手机共享我电脑的端口，也就说我的手机发送一些请求都会先通过电脑的端口，我选择第二种。</p>
+<h2 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h2><p>这里我要再强调一遍啊，我翻墙用的是<code>SSR</code>不是<code>SS</code>，网上很多的教程都是基于<code>SS</code>的，所以我之前试了很多的教程都不对，就是因为那些都是基于<code>SS</code>的。<br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/SSR%E5%B1%80%E5%9F%9F%E7%BD%91%E5%85%B1%E4%BA%AB%28Mac%29/2018-6-2-1.png" alt="我用的SSR图标"><br>其实那些教程里面大多数都推荐使用<code>privoxy</code>，我以前不知道它是干什么用的，于是在<code>Wiki</code>里面查了一下，一下是查询的内容：</p>
+<blockquote>
+<p><code>Privoxy</code>是一款不进行网页缓存且自带过滤功能的代理服务器，针对<code>HTTP</code>、<code>HTTPS</code>协议。通过其过滤功能，用户可以保护隐私、对网页内容进行过滤、管理<code>Cookie</code>，以及拦阻各种广告等。<code>Privoxy</code>可以单机使用，也可以应用到多用户的网络。==它也可以与其他代理相连（通常与<code>Squid</code>一起使用），更可以突破互联网审查。==</p>
+</blockquote>
+<p>🤣打黄线的部分可以看出<code>Privoxy</code>就是来设置代理和其它设备相连的。<br>步骤很简单，总结起来就是三步：</p>
+<ol>
+<li>查看本电脑的<code>ip</code>地址，<code>mac</code>下面打开命令行，在命令行里面敲ifconfig，会出现一大串文字，我们需要找一段字，具体在下面画红线的地方：<br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/SSR%E5%B1%80%E5%9F%9F%E7%BD%91%E5%85%B1%E4%BA%AB%28Mac%29/2018-6-2-2.png" alt=""></li>
+<li>接着我们打开<code>shadowsocks</code>，在菜单页里面找<code>HTTP</code>代理设置，打开以后设置监听的地址和端口，注意端口不能起常用的端口名，要不然会占用端口的。<br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/SSR%E5%B1%80%E5%9F%9F%E7%BD%91%E5%85%B1%E4%BA%AB%28Mac%29/2018-6-2-3.png" alt=""><br>接着在<code>HTTP</code>代理监听地址里面填写本电脑<code>ip</code>地址，<code>HTTP</code>代理监听端口随便填，这样就会监听这个<code>ip</code>地址下的这个端口（也就是说我的手机请求会被监听）<br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/SSR%E5%B1%80%E5%9F%9F%E7%BD%91%E5%85%B1%E4%BA%AB%28Mac%29/2018-6-2-4.png" alt=""></li>
+<li>接着在手机上面连接你电脑所处的局域网，先把代理模式调成手动模式，在高级设置里面设置代理服务器主机名和代理服务器端口，具体如图所示：<br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/SSR%E5%B1%80%E5%9F%9F%E7%BD%91%E5%85%B1%E4%BA%AB%28Mac%29/2018-6-2-5.png" alt=""><h2 id="更多的用法"><a href="#更多的用法" class="headerlink" title="更多的用法"></a>更多的用法</h2>默认情况下我们电脑的终端是没有翻墙的，如果你想翻墙，你需要在终端里面设置<br>我的终端用的是<code>zsh</code>,所以我们需要编辑<code>.zshrc</code>，在里面加<br><code>export ALL_PROXY=socks5://XXXX.XXXX.XXXX.XXXX:XXXX</code>(你的<code>ip</code>地址加端口名)，最后<code>source .zshrc</code>使文件生效。这里的不是用的<code>HTTP</code>代理而是<code>socks5</code>代理，需要在<code>shadowsocks</code>的高级设置里面查看<code>socks5</code>的监听地址和监听端口，具体的内容如图：<br><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/SSR%E5%B1%80%E5%9F%9F%E7%BD%91%E5%85%B1%E4%BA%AB%28Mac%29/2018-6-2-6.png" alt=""></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+	<div>
+      
+	</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/26/Android-滑动解锁页/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1686,7 +1855,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1708,7 +1877,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
