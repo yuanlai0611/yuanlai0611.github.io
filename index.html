@@ -324,6 +324,186 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/07/利用AlarmManager完成精准的轮询/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="袁来">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="袁来的code空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/07/利用AlarmManager完成精准的轮询/" itemprop="url">利用AlarmManager完成精准的轮询</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-07T15:25:04+08:00">
+                2018-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AlarmManager/" itemprop="url" rel="index">
+                    <span itemprop="name">AlarmManager</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/07/利用AlarmManager完成精准的轮询/" class="leancloud_visitors" data-flag-title="利用AlarmManager完成精准的轮询">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count">℃</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>想起轮询我们一般会想起利用Handler和Timer，然而AlarmManager相比于Handler和Timer有优势，具体的分析我参考了一个大神的博客：</p>
+<blockquote>
+<p>最近在做一个需求：客户端按照规定的时间间隔向服务端发送定位。一看到这个需求就想到了使用 AlarmManager 来实现。 AlarmManager 经常被用来执行定时任务，比如设置闹铃、发送心跳包等。也许有人会有疑问：为什么不能使用相同具有定时效果的 Timer 和 Handler 呢？</p>
+</blockquote>
+<blockquote>
+<p>其实答案非常简单，相对于 Handler 来说，使用 sendEmptyMessageDelayed 方法是依赖于 Handler 所在的线程的，如果线程结束，就起不到定时任务的效果；而 AlarmManager 依赖的是 Android 系统的服务，具备唤醒机制。比起 Handler 也就更合适了。</p>
+</blockquote>
+<blockquote>
+<p>而至于 Timer 可以精确地做到定时操作，但是相比于 AlarmManager 而言还是差了一截。同理，如果手机关屏后长时间不使用， CPU 就会进入休眠模式。这个使用如果使用 Timer 来执行定时任务就会失败，因为 Timer 无法唤醒 CPU 。</p>
+</blockquote>
+<blockquote>
+<p>所以，综上所述，AlarmManager 就成为了最佳选择。</p>
+</blockquote>
+<p>综上可知，AlarmManager不仅仅只是用了完成闹钟操作，还可以用来完成一些定时任务，但是因为系统的不断升级和优化，出于省电的考虑，在<code>Android KITKAT</code>版本及之后，setRepeating开始变得不准确，想要精准的定时我们只能使用<code>setExact</code>，在<code>Android M</code>及之后的版本，我们只能使用<code>setExactAndAllowWhileIdle</code>来应对<code>Android M</code>出现的Doze模式，具体的<code>Android M</code>版本的变化可以参考谷歌的官网<a href="https://developer.android.google.cn/about/versions/marshmallow/android-6.0-changes" target="_blank" rel="noopener">Android 6.0 变更</a>。随意为了覆盖所有的版本，我们必须考虑在不同的Android版本来实现定时设置，接下来我们来试着实现它。</p>
+<h2 id="实现精准轮询的原理"><a href="#实现精准轮询的原理" class="headerlink" title="实现精准轮询的原理"></a>实现精准轮询的原理</h2><p>轮询一般意味着我们需要Service来完成我们的一些具体的请求，这里我想让AlarmManager来定时唤醒一个Receiver用来启动请求的Service，这里比较困难的是，<code>Android KITKAT</code>及之后的版本设置的定时都只能管一次，所以我们需要做到的是完成一次定时任务以后接着设置第二次定时任务，一次类推……<br>所以我们梳理一下这里我们要靠什么完成后台的精准轮询，我们需要一个Service来完成我们真正想做的事情，比如说请求；我们需要一个Recever来启动Service；我们还需要一个工具类来专门设置定时（当然你不想这样子也可以），我们设置的定时是定时发送一个广播。</p>
+<h2 id="实现精准轮询的步骤"><a href="#实现精准轮询的步骤" class="headerlink" title="实现精准轮询的步骤"></a>实现精准轮询的步骤</h2><p>构造一个Service类（PollingService），在该类里面实现具体要实现的事情，具体的代码如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PollingService</span> <span class="keyword">extends</span> <span class="title">IntentService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"PollingService"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onHandleIntent</span><span class="params">(@Nullable Intent intent)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">       <span class="comment">// 做你想做的事情，比如说发送请求</span></span><br><span class="line">       </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Intent <span class="title">newIntent</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(context, PollingService.class);</span><br><span class="line">        <span class="keyword">return</span> intent;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PollingService</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(TAG);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>构造一个Receiver类（PollingReceiver）类来接收AlarmManager向该receiver发送的广播，接收到广播以后我们就可以来启动指定service</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PollingReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String TAG = <span class="string">"PollingReceiver"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Log.d(TAG, <span class="string">"调用了onReceive"</span>);</span><br><span class="line">        PollingUtils.startExactAgain(context, <span class="number">60</span>, PollingReceiver.class, PollingUtils.ACTION);</span><br><span class="line">        Intent i = PollingService.newIntent(context);</span><br><span class="line">        context.startService(i);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>别忘了在Manifest里面注册之前构造的Receiver和Service，接着是我们打包的一个AlarmManager的工具类，在这里我们需要注意是使用setExactAndAllowWhileIdle和setExact方法的第二个参数的时间都是基于ELAPSED_REALTIME，所以第二个参数都应该是SystemClock.elapsedRealtime()+间隔时间，具体的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PollingUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String ACTION = <span class="string">"com.example.yuanyuanlai.servicetest.pollingutils"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">startPollingService</span><span class="params">(Context context, <span class="keyword">int</span> seconds, Class&lt;?&gt; cls, String action)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        AlarmManager alarmManager = (AlarmManager)context</span><br><span class="line">                .getSystemService(Context.ALARM_SERVICE);</span><br><span class="line"></span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(context, cls);</span><br><span class="line">        intent.setAction(action);</span><br><span class="line">        PendingIntent pendingIntent = PendingIntent</span><br><span class="line">                .getBroadcast(context, <span class="number">0</span>, intent, PendingIntent.FLAG_UPDATE_CURRENT);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//触发服务的起始时间</span></span><br><span class="line">        <span class="keyword">long</span> triggerTime = SystemClock.elapsedRealtime();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M)&#123;</span><br><span class="line">            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime+seconds*<span class="number">1000</span>, pendingIntent);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT)&#123;</span><br><span class="line">            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime+seconds*<span class="number">1000</span>, pendingIntent);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, seconds*<span class="number">1000</span>, pendingIntent);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">startExactAgain</span><span class="params">(Context context, <span class="keyword">int</span> seconds, Class&lt;?&gt; cls, String action)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        AlarmManager alarmManager = (AlarmManager)context</span><br><span class="line">                .getSystemService(Context.ALARM_SERVICE);</span><br><span class="line"></span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(context, cls);</span><br><span class="line">        intent.setAction(action);</span><br><span class="line">        PendingIntent pendingIntent = PendingIntent</span><br><span class="line">                .getBroadcast(context, <span class="number">0</span>, intent, PendingIntent.FLAG_UPDATE_CURRENT);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//触发服务的起始时间</span></span><br><span class="line">        <span class="keyword">long</span> triggerTime = SystemClock.elapsedRealtime();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M)&#123;</span><br><span class="line">            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime+seconds*<span class="number">1000</span>, pendingIntent);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT)&#123;</span><br><span class="line">            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime+seconds*<span class="number">1000</span>, pendingIntent);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">stopPollingService</span><span class="params">(Context context, Class&lt;?&gt; cls, String action)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);</span><br><span class="line"></span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(context, cls);</span><br><span class="line">        intent.setAction(action);</span><br><span class="line">        PendingIntent pendingIntent = PendingIntent</span><br><span class="line">                .getBroadcast(context, <span class="number">0</span>, intent, PendingIntent.FLAG_UPDATE_CURRENT);</span><br><span class="line"></span><br><span class="line">        alarmManager.cancel(pendingIntent);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动定时和停止定时的代码具体如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PollingUtils.startPollingService(MainActivity.<span class="keyword">this</span>, <span class="number">60</span>, PollingReceiver.class, PollingUtils.ACTION);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PollingUtils.stopPollingService(MainActivity.<span class="keyword">this</span>, PollingReceiver.class, PollingUtils.ACTION);</span><br></pre></td></tr></table></figure>
+<h2 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h2><p><img src="https://blog-picture-yuanlai.oss-cn-beijing.aliyuncs.com/%E5%88%A9%E7%94%A8AlarmManager%E5%AE%8C%E6%88%90%E7%B2%BE%E5%87%86%E7%9A%84%E8%BD%AE%E8%AF%A2/2018-6-7-1.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+	<div>
+      
+	</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/02/SSR局域网共享-Mac/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1855,7 +2035,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1866,7 +2046,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1877,7 +2057,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
